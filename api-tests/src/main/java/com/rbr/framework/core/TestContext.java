@@ -11,6 +11,9 @@ public class TestContext {
 
     private static final ThreadLocal<ApiClient> client = ThreadLocal.withInitial(ApiClient::new);
 
+    private TestContext() {
+    }
+
     public static ApiClient api() {
         return client.get();
     }

@@ -16,4 +16,15 @@ public class User {
     private String phone;
     private String website;
     private Company company;
+
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", website='" + website + '\'' +
+                '}';
+    }
 }

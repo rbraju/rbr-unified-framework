@@ -6,293 +6,202 @@ A comprehensive, enterprise-grade testing framework designed to support both **A
 
 This framework provides a robust foundation for automated testing with a clear separation of concerns, environment-based configuration management, and industry-standard tooling. The architecture emphasizes code reusability, maintainability, and extensibility.
 
-## 🏗️ Architecture
+The framework is organized into two independent but complementary testing modules that can be used together or separately depending on your testing needs.
 
-The framework is organized into two main modules:
+## 🏗️ Framework Structure
 
-### 1. API Testing Module (`api-tests/`)
-- **Language**: Java 17
-- **Testing Framework**: TestNG
-- **HTTP Client**: Rest-Assured 5.5.0
-- **Assertions**: AssertJ
-- **Build Tool**: Maven
-- **Code Generation**: Lombok
-- **JSON Processing**: Jackson
-- **Reporting**: Allure Framework
-
-### 2. UI Testing Module (`ui-tests/`)
-- **Language**: TypeScript
-- **Testing Framework**: Playwright
-- **Package Manager**: npm
-- **Configuration**: Playwright Config (supports Chromium, Firefox, WebKit)
-
-## 📁 Project Structure
+The RBR Unified Framework consists of two main modules, each with its own architecture, dependencies, and test execution capabilities:
 
 ```
 rbr-unified-framework/
-├── api-tests/
-│   ├── src/
-│   │   ├── main/java/com/rbr/framework/
-│   │   │   ├── config/          # Configuration management
-│   │   │   ├── core/            # Core framework components
-│   │   │   ├── http/            # HTTP client abstractions
-│   │   │   ├── model/           # Data models (DTOs)
-│   │   │   └── utils/           # Utility classes
-│   │   └── test/
-│   │       ├── java/            # Test classes
-│   │       └── resources/       # Test configuration files
-│   └── pom.xml
-├── ui-tests/
-│   ├── tests/                   # Playwright test files
-│   ├── playwright.config.ts     # Playwright configuration
-│   └── package.json
-└── README.md
+├── api-tests/              # API Testing Module (Java/TestNG/Rest-Assured)
+│   ├── README.md          # API Tests specific documentation
+│   ├── pom.xml            # Maven configuration
+│   └── src/               # Source code and tests
+├── ui-tests/              # UI Testing Module (TypeScript/Playwright)
+│   ├── README.md          # UI Tests specific documentation
+│   ├── package.json       # npm configuration
+│   ├── playwright.config.ts
+│   └── tests/             # Test specifications
+├── docs/                  # Additional documentation
+├── pipelines/             # CI/CD pipeline configurations
+└── README.md             # This file
 ```
 
-## ✨ Key Features
+## 📦 Module Overview
 
-### Configuration Management
-- **Environment-based configuration**: Support for DEV, STAGING, and PROD environments
-- **Type-safe configuration access**: Typed getters for configuration values (string, int, boolean)
-- **Flexible property loading**: Environment-specific `.properties` files
-- **Runtime environment selection**: Set via system property (`-Denv=STAGING`)
+### 1. API Testing Module (`api-tests/`)
 
-### HTTP Client Abstraction
-- **Unified API client**: Clean, fluent interface for API calls
-- **Request specification factory**: Centralized request configuration
-- **Automatic logging**: Configurable API request/response logging
-- **Response validation**: Helper utilities for common assertions
+**Purpose**: Automated API/backend testing using Java-based tools.
 
-### Test Context Management
-- **Thread-local test context**: Thread-safe test data management
-- **API client per thread**: Isolated API clients for parallel test execution
-- **Test data storage**: Flexible key-value storage for test data sharing
+**Key Technologies**:
+- Java 17
+- TestNG
+- Rest-Assured
+- Allure Reporting
 
-### Code Quality & Maintainability
-- **Builder pattern**: Lombok-generated builders for complex objects
-- **Separation of concerns**: Clear layer separation (config, http, core, tests)
-- **Base test class**: Common test setup and logging
-- **Utility classes**: Reusable test data generators
+**Architecture**: Layered architecture with configuration, HTTP, core, model, and test layers.
 
-### Security & Best Practices
-- **Dependency management**: Up-to-date versions with security fixes
-- **Vulnerability mitigation**: Explicit dependency exclusions for known vulnerabilities
-- **Type safety**: Strong typing throughout the framework
-- **Immutable configurations**: Singleton pattern for configuration access
+**See [api-tests/README.md](api-tests/README.md) for detailed documentation.**
 
-## 🚀 Getting Started
+### 2. UI Testing Module (`ui-tests/`)
+
+**Purpose**: Automated browser/UI testing using TypeScript and Playwright.
+
+**Key Technologies**:
+- TypeScript
+- Playwright
+- Page Object Model (POM)
+
+**Architecture**: Page Object Model pattern with base page classes and domain-specific page implementations.
+
+**See [ui-tests/README.md](ui-tests/README.md) for detailed documentation.**
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- **Java 17** or higher
-- **Maven 3.6+**
+
+- **Java 17+** (for API tests)
+- **Maven 3.6+** (for API tests)
 - **Node.js 16+** (for UI tests)
-- **npm** or **yarn**
+- **npm** or **yarn** (for UI tests)
 
 ### Installation
 
-#### API Tests Setup
+#### API Tests
 ```bash
 cd api-tests
 mvn clean install
 ```
 
-#### UI Tests Setup
+#### UI Tests
 ```bash
 cd ui-tests
 npm install
+npx playwright install  # Install browser binaries
 ```
-
-### Configuration
-
-#### API Tests Configuration
-1. Create environment-specific property files in `api-tests/src/test/resources/`:
-   - `dev.properties`
-   - `staging.properties`
-   - `prod.properties`
-
-2. Example `staging.properties`:
-```properties
-base.url=https://jsonplaceholder.typicode.com
-timeout=30000
-api.log=true
-```
-
-3. Run tests with environment selection:
-```bash
-mvn test -Denv=STAGING
-```
-
-#### UI Tests Configuration
-Configure browsers and test settings in `playwright.config.ts`:
-- Default: Runs on Chromium, Firefox, and WebKit
-- Parallel execution enabled
-- HTML reporter configured
 
 ## 🧪 Running Tests
 
 ### API Tests
 ```bash
-# Run all tests with default environment (STAGING)
-mvn test
-
-# Run tests with specific environment
-mvn test -Denv=DEV
-
-# Run specific test class
-mvn test -Dtest=UserApiTests
-
-# Run with Allure reporting
-mvn test
-mvn allure:serve
+cd api-tests
+mvn test                  # Run all tests
+mvn test -Denv=STAGING    # Run with specific environment
+mvn allure:serve          # View Allure reports
 ```
 
 ### UI Tests
 ```bash
-# Run all UI tests
-npx playwright test
-
-# Run tests in headed mode
-npx playwright test --headed
-
-# Run tests for specific browser
-npx playwright test --project=chromium
-
-# View test report
-npx playwright show-report
+cd ui-tests
+npx playwright test                    # Run all tests
+npx playwright test --headed           # Run in headed mode
+npx playwright test --project=chromium # Run on specific browser
+npx playwright show-report             # View test report
 ```
 
-## 📚 Framework Components
+## 📚 Documentation
 
-### Configuration Layer (`config/`)
+Each module has its own comprehensive README with detailed information:
 
-#### `ConfigLoader`
-- Loads environment-specific configuration files
-- Provides type-safe accessors for configuration values
-- Supports required and optional properties with defaults
+- **[API Tests README](api-tests/README.md)**: Complete guide for API testing framework
+  - Architecture details
+  - Configuration management
+  - Framework components
+  - Extension guide
 
-#### `TestConfig`
-- Domain-specific configuration facade
-- Provides typed accessors for common test configuration
-- Examples: `baseUrl()`, `timeout()`, `apiLog()`
+- **[UI Tests README](ui-tests/README.md)**: Complete guide for UI testing framework
+  - Page Object Model pattern
+  - Playwright configuration
+  - Test writing guidelines
+  - Best practices
 
-#### `Environment`
-- Enum for supported environments (DEV, STAGING, PROD)
+## 🎯 Common Features
 
-### HTTP Layer (`http/`)
+Both modules share common principles:
 
-#### `ApiClient`
-- High-level API client with fluent interface
-- Supports GET, POST (extensible for PUT, DELETE, etc.)
-- Configurable request/response logging
+### Design Patterns
+- **Separation of Concerns**: Clear layer separation
+- **DRY Principle**: Reusable components and utilities
+- **Type Safety**: Strong typing throughout
+- **Base Classes**: Common functionality in base classes
 
-#### `RequestSpecificationFactory`
-- Creates standardized request specifications
-- Applies base URL, content type, and headers
-- Configurable logging
+### Configuration Management
+- **Environment-based**: Support for multiple environments
+- **External Configuration**: No hardcoded values
+- **Type-safe Access**: Typed getters for configuration values
 
-#### `ResponseValidator`
-- AssertJ-based response validation utilities
-- Fluent assertion methods for common validations
+### Best Practices
+- **Maintainability**: Clear structure and naming conventions
+- **Scalability**: Extensible architecture
+- **Reporting**: Comprehensive test reporting
+- **Error Handling**: Proper error handling and meaningful messages
 
-### Core Layer (`core/`)
+## 🔧 Integration
 
-#### `TestContext`
-- Thread-local storage for test data
-- Thread-safe API client management
-- Enables data sharing between test steps
+The two modules are designed to work independently but can be integrated:
 
-### Test Layer
+1. **Parallel Execution**: Run API and UI tests in parallel for faster feedback
+2. **Data Sharing**: Use API tests to set up test data for UI tests
+3. **Validation**: Combine API and UI tests for comprehensive validation
+4. **CI/CD**: Both modules can be integrated into CI/CD pipelines
 
-#### `BaseTest`
-- Base class for all test classes
-- Common setup and logging
-- Allure step annotations
+## 📈 Project Organization
 
-#### Example Test: `UserApiTests`
-```java
-public class UserApiTests extends BaseTest {
-    @Test
-    public void testGetUserById() {
-        var response = api().get(BASE_URL + "/users/1");
-        Assert.assertEquals(response.getStatusCode(), 200);
-    }
-    
-    @Test
-    public void createUser() {
-        var response = api().post(BASE_URL + "/users", UserUtil.getDefaultUser());
-        Assert.assertEquals(response.getStatusCode(), 201);
-    }
-}
+### Directory Structure
+```
+rbr-unified-framework/
+├── api-tests/          # API testing module
+├── ui-tests/           # UI testing module
+├── docs/               # Shared documentation
+├── pipelines/          # CI/CD configurations
+└── README.md          # Main documentation (this file)
 ```
 
-## 🔧 Extending the Framework
-
-### Adding New API Endpoints
-1. Create data models in `model/` package using Lombok builders
-2. Create utility classes for test data generation
-3. Write test classes extending `BaseTest`
-4. Use `TestContext.api()` for API calls
-
-### Adding New Environments
-1. Add enum value to `Environment` class
-2. Create corresponding `.properties` file in `test/resources/`
-3. Run tests with `-Denv=<ENVIRONMENT_NAME>`
-
-### Adding UI Test Pages
-1. Create page object models (recommended)
-2. Write test specs in `ui-tests/tests/`
-3. Configure in `playwright.config.ts` if needed
-
-## 📦 Dependencies
-
-### API Tests Key Dependencies
-- **TestNG 7.9.0**: Testing framework
-- **Rest-Assured 5.5.0**: API testing
-- **AssertJ 3.25.1**: Fluent assertions
-- **Lombok 1.18.32**: Boilerplate reduction
-- **Jackson 2.15.2**: JSON processing
-- **Allure 2.21.0**: Test reporting
-- **SLF4J 2.0.9**: Logging
-
-### UI Tests Key Dependencies
-- **Playwright 1.57.0**: Browser automation
-- **TypeScript**: Type safety
-
-## 🎓 Design Patterns & Best Practices
-
-1. **Singleton Pattern**: Configuration classes are singletons
-2. **Factory Pattern**: Request specifications created via factory
-3. **Builder Pattern**: Data models use Lombok builders
-4. **Facade Pattern**: TestConfig provides simplified configuration access
-5. **Thread-Local Pattern**: TestContext uses thread-local for thread safety
-6. **Separation of Concerns**: Clear layer separation
-7. **DRY Principle**: Reusable utilities and base classes
-8. **Type Safety**: Strong typing throughout
-
-## 🔐 Security Considerations
-
-- Updated dependency versions to mitigate known vulnerabilities
-- Explicit exclusion of vulnerable transitive dependencies
-- Environment-based configuration for sensitive data
-- No hardcoded credentials (uses configuration files)
-
-## 📈 Future Enhancements
-
-- [ ] Database testing utilities
-- [ ] Performance testing integration
-- [ ] CI/CD pipeline integration examples
-- [ ] Advanced reporting and dashboards
-- [ ] Test data management framework
-- [ ] API mocking capabilities
-- [ ] Custom Playwright reporters
+### Module Independence
+- Each module has its own dependencies
+- Independent build and execution
+- Can be used separately or together
+- Shared documentation in `docs/` folder
 
 ## 🤝 Contributing
 
-This is a unified testing framework designed for scalability and maintainability. When adding features:
-- Follow the existing architecture patterns
-- Maintain separation of concerns
-- Add appropriate logging and error handling
-- Update this README with new features
+When contributing to the framework:
+
+1. **Follow Module Patterns**: Maintain consistency with existing architecture
+2. **Update Documentation**: Keep README files up to date
+3. **Add Examples**: Include usage examples for new features
+4. **Test Changes**: Ensure all tests pass before submitting
+
+## 📖 Learning Resources
+
+### API Tests
+- [TestNG Documentation](https://testng.org/doc/documentation-main.html)
+- [Rest-Assured Documentation](https://rest-assured.io/)
+- [Allure Framework](https://docs.qameta.io/allure/)
+
+### UI Tests
+- [Playwright Documentation](https://playwright.dev/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Page Object Model Pattern](https://playwright.dev/docs/pom)
+
+## 🔐 Security Considerations
+
+Both modules follow security best practices:
+
+- **No Hardcoded Credentials**: All sensitive data in configuration files
+- **Environment Separation**: Different configs for different environments
+- **Dependency Management**: Regular updates for security patches
+- **Access Control**: Proper access control in CI/CD pipelines
+
+## 📞 Support
+
+For questions or issues:
+
+1. Check the respective module's README for detailed documentation
+2. Review existing tests for examples
+3. Refer to the official documentation of underlying frameworks
 
 ---
+
 **Built with ❤️ for robust, maintainable, and scalable test automation**
