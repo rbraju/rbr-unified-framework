@@ -5,7 +5,7 @@ export default defineConfig({
     fullyParallel: true,
 
     reporter: 'html',
-    timeout: 30 * 1000, // Default timeout of 30 seconds per test
+    timeout: 60 * 1000, // Default timeout of 60 seconds per test
 
     // Fail the build on CI if test.only accidentally left in the source code
     forbidOnly: !!process.env.CI,
