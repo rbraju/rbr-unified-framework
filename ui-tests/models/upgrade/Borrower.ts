@@ -9,5 +9,7 @@ export class Borrower {
         public zip: string,
         public dateOfBirth: string,
         public phoneNumber: string,
+        public individualAnnualIncome: string,
+        public additionalAnnualIncome: string,
     ) { }
 }

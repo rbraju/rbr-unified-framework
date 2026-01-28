@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
-import { FunnelPI1Page } from "./FunnelPI1Page";
+import { BasePage } from "../BasePage";
+import { FunnelPI1BasicInfoPage } from "./FunnelPI1BasicInfoPage";
 
 export class HomePage extends BasePage {
 
@@ -12,7 +12,7 @@ export class HomePage extends BasePage {
 
     async goto(): Promise<void> {
         await super.goto('/');
-        await this.waitForPageLoad
+        await this.waitForPageLoad();
     }
 
     // Locators for Home Page - Lazy getters
@@ -22,12 +22,12 @@ export class HomePage extends BasePage {
         getStarted: () => this.page.locator('button[type="submit"]'),
     }
 
-    async enterAmountAndGetStarted(amount: string, loanPurpose: string): Promise<FunnelPI1Page> {
+    async enterAmountAndGetStarted(amount: string, loanPurpose: string): Promise<FunnelPI1BasicInfoPage> {
         await this.locators.desiredAmount().fill(amount);
         await this.locators.loanPurpose().selectOption(loanPurpose)
         await this.locators.getStarted().click();
 
-        const nextPage = new FunnelPI1Page(this.page);
+        const nextPage = new FunnelPI1BasicInfoPage(this.page);
         await nextPage.waitForPageLoad();
         return nextPage;
     }

@@ -1,6 +1,7 @@
 import test from "@playwright/test";
-import { HomePage } from "../../upgrade/pages/HomePage";
-import { Borrower } from "../../upgrade/models/Borrower";
+import { Borrower } from "../../models/upgrade/Borrower";
+import { HomePage } from "../../pages/upgrade/HomePage";
+import { BorrowerUtil } from "../../utils/BorrowerUtil";
 
 test.beforeEach(async ({ page }) => {
     // Maximize the browser window
@@ -16,7 +17,9 @@ test.only('Get started from home page', async ({ page }) => {
     const funnelPI1Page = await homepage.enterAmountAndGetStarted('9000', 'Large Purchase');
 
     // Enter basic information
-    await funnelPI1Page.waitForPageLoad();
-    let borrower = new Borrower('Nodald', 'Rumpt', '123 Main Street', 'San Francisco', 'CA', '94105', '08/25/1993', '4144144144');
-    await funnelPI1Page.enterBasicInformation(borrower);
+    let borrower: Borrower = await BorrowerUtil.getRandomBorrower();
+    const funnelPI1IncomePage = await funnelPI1Page.enterBasicInformation(borrower);
+
+    // Enter income details
+    await funnelPI1IncomePage.enterIncomeDetails(borrower);
 });

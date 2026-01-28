@@ -1,14 +1,15 @@
 import { expect, Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
-import { Borrower } from "../models/Borrower";
+import { BasePage } from "../BasePage";
+import { Borrower } from "../../models/upgrade/Borrower";
+import { FunnelPI1IncomePage } from "./FunnelPI1IncomePage";
 
-export class FunnelPI1Page extends BasePage {
+export class FunnelPI1BasicInfoPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
     }
 
-    // Locators for Funnel - Personal Information 1 page
+    // Locators for Funnel - Personal Information 1 - Basic Info page
     private readonly locators = {
         firstName: () => this.page.locator('input[name="borrowerFirstName"]'),
         lastName: () => this.page.locator('input[name="borrowerLastName"]'),
@@ -21,7 +22,7 @@ export class FunnelPI1Page extends BasePage {
         continueButton: () => this.page.locator('button[data-auto="continuePersonalInfo"]'),
     }
 
-    async enterBasicInformation(borrower: Borrower): Promise<void> {
+    async enterBasicInformation(borrower: Borrower): Promise<FunnelPI1IncomePage> {
         await this.locators.firstName().fill(borrower.firstName);
         await this.locators.lastName().fill(borrower.lastName);
         await this.enterAddress(borrower);
@@ -33,12 +34,16 @@ export class FunnelPI1Page extends BasePage {
             await this.locators.phoneNumber().type(borrower.phoneNumber);
         }
         await this.locators.continueButton().click();
+        const nextPage = new FunnelPI1IncomePage(this.page);
+        await nextPage.waitForPageLoad();
+        return nextPage;
     }
 
     async enterAddress(borrower: Borrower): Promise<void> {
         await this.locators.address().fill(borrower.address);
 
         // Type address in the address field and wait for the suggestions to appear and select
+        console.log(borrower);
         await this.page.getByRole('listbox', {name: 'options'}).waitFor({state: 'visible'});
         await this.page.getByRole('option', { name: `${borrower.address}, ${borrower.city}, ${borrower.state}, USA` }).click();
 
