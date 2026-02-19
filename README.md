@@ -6,11 +6,11 @@ A comprehensive, enterprise-grade testing framework designed to support both **A
 
 This framework provides a robust foundation for automated testing with a clear separation of concerns, environment-based configuration management, and industry-standard tooling. The architecture emphasizes code reusability, maintainability, and extensibility.
 
-The framework is organized into two independent but complementary testing modules that can be used together or separately depending on your testing needs.
+The framework is organized into three independent but complementary testing modules that can be used together or separately depending on your testing needs.
 
 ## 🏗️ Framework Structure
 
-The RBR Unified Framework consists of two main modules, each with its own architecture, dependencies, and test execution capabilities:
+The RBR Unified Framework consists of three main modules, each with its own architecture, dependencies, and test execution capabilities:
 
 ```
 rbr-unified-framework/
@@ -23,6 +23,11 @@ rbr-unified-framework/
 │   ├── package.json       # npm configuration
 │   ├── playwright.config.ts
 │   └── tests/             # Test specifications
+├── perf-tests/            # Performance Testing Module
+│   ├── gatling/           # Gatling-based performance tests (Scala)
+│   │   ├── pom.xml        # Maven configuration
+│   │   └── src/           # Gatling simulation scenarios
+│   └── k6/                # Grafana K6-based performance tests (JavaScript)
 ├── docs/                  # Additional documentation
 ├── pipelines/             # CI/CD pipeline configurations
 └── README.md             # This file
@@ -57,14 +62,41 @@ rbr-unified-framework/
 
 **See [ui-tests/README.md](ui-tests/README.md) for detailed documentation.**
 
+### 3. Performance Testing Module (`perf-tests/`)
+
+**Purpose**: Load and performance testing using multiple tools.
+
+**Sub-modules**:
+
+#### 3a. Gatling Tests (`perf-tests/gatling/`)
+
+**Key Technologies**:
+- Scala
+- Gatling
+- Maven
+
+**Architecture**: Gatling simulation scenarios for load testing and performance analysis.
+
+#### 3b. Grafana K6 Tests (`perf-tests/k6/`)
+
+**Key Technologies**:
+- JavaScript
+- Grafana K6
+- Node.js
+
+**Architecture**: K6 scripts for performance and load testing with modern JavaScript syntax.
+
+**See [perf-tests/](perf-tests/) for performance testing scenarios.**
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Java 17+** (for API tests)
-- **Maven 3.6+** (for API tests)
-- **Node.js 16+** (for UI tests)
+- **Java 17+** (for API tests and Gatling performance tests)
+- **Maven 3.6+** (for API tests and Gatling performance tests)
+- **Node.js 16+** (for UI tests and K6 performance tests)
 - **npm** or **yarn** (for UI tests)
+- **Grafana K6** (for K6 performance tests - [Installation Guide](https://k6.io/docs/getting-started/installation/))
 
 ### Installation
 
@@ -79,6 +111,21 @@ mvn clean install
 cd ui-tests
 npm install
 npx playwright install  # Install browser binaries
+```
+
+#### Performance Tests
+
+**Gatling Tests:**
+```bash
+cd perf-tests/gatling
+mvn clean install
+```
+
+**Grafana K6 Tests:**
+```bash
+cd perf-tests/k6
+# K6 is installed globally or via package manager
+# No build step required for K6 scripts
 ```
 
 ## 🧪 Running Tests
@@ -100,6 +147,24 @@ npx playwright test --project=chromium # Run on specific browser
 npx playwright show-report             # View test report
 ```
 
+### Performance Tests
+
+**Gatling Tests:**
+```bash
+cd perf-tests/gatling
+mvn gatling:test                        # Run all Gatling simulations
+mvn gatling:test -Dgatling.simulationClass=com.rbr.perf.SimpleSimulation  # Run specific simulation
+# Reports are generated in target/gatling/
+```
+
+**Grafana K6 Tests:**
+```bash
+cd perf-tests/k6
+k6 run script.js                        # Run a K6 script
+k6 run --vus 10 --duration 30s script.js  # Run with specific load parameters
+# Results are displayed in console and can be exported to various formats
+```
+
 ## 📚 Documentation
 
 Each module has its own comprehensive README with detailed information:
@@ -116,9 +181,15 @@ Each module has its own comprehensive README with detailed information:
   - Test writing guidelines
   - Best practices
 
+- **[Performance Tests](perf-tests/)**: Performance testing with Gatling and Grafana K6
+  - **Gatling**: Scala-based load testing scenarios
+  - **Grafana K6**: JavaScript-based performance testing scripts
+  - Performance metrics and reporting
+  - Load testing patterns and best practices
+
 ## 🎯 Common Features
 
-Both modules share common principles:
+All modules share common principles:
 
 ### Design Patterns
 - **Separation of Concerns**: Clear layer separation
@@ -139,12 +210,13 @@ Both modules share common principles:
 
 ## 🔧 Integration
 
-The two modules are designed to work independently but can be integrated:
+The three modules are designed to work independently but can be integrated:
 
-1. **Parallel Execution**: Run API and UI tests in parallel for faster feedback
+1. **Parallel Execution**: Run API, UI, and performance tests in parallel for faster feedback
 2. **Data Sharing**: Use API tests to set up test data for UI tests
 3. **Validation**: Combine API and UI tests for comprehensive validation
-4. **CI/CD**: Both modules can be integrated into CI/CD pipelines
+4. **Performance Validation**: Use performance tests to validate system behavior under load
+5. **CI/CD**: All modules can be integrated into CI/CD pipelines
 
 ## 📈 Project Organization
 
@@ -153,6 +225,7 @@ The two modules are designed to work independently but can be integrated:
 rbr-unified-framework/
 ├── api-tests/          # API testing module
 ├── ui-tests/           # UI testing module
+├── perf-tests/         # Performance testing module
 ├── docs/               # Shared documentation
 ├── pipelines/          # CI/CD configurations
 └── README.md          # Main documentation (this file)
@@ -185,9 +258,19 @@ When contributing to the framework:
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [Page Object Model Pattern](https://playwright.dev/docs/pom)
 
+### Performance Tests
+- **Gatling**:
+  - [Gatling Documentation](https://gatling.io/docs/)
+  - [Scala Documentation](https://www.scala-lang.org/documentation/)
+  - [Gatling Best Practices](https://gatling.io/docs/gatling/reference/current/general/best-practices/)
+- **Grafana K6**:
+  - [K6 Documentation](https://k6.io/docs/)
+  - [K6 JavaScript API](https://k6.io/docs/javascript-api/)
+  - [K6 Best Practices](https://k6.io/docs/using-k6/best-practices/)
+
 ## 🔐 Security Considerations
 
-Both modules follow security best practices:
+All modules follow security best practices:
 
 - **No Hardcoded Credentials**: All sensitive data in configuration files
 - **Environment Separation**: Different configs for different environments

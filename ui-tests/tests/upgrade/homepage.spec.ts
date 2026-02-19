@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
 });
 
-test.only('Get started from home page', async ({ page }) => {
+test('Get started from home page', async ({ page }) => {
     const homepage = new HomePage(page);
 
     // Navigate to home page, enter loan amount and get started

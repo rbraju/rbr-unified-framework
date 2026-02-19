@@ -1,5 +1,5 @@
 import { expect, Page } from "@playwright/test";
-import { BasePage } from "../BasePage";
+import { BasePage } from "./BasePage";
 import { Borrower } from "../../models/upgrade/Borrower";
 
 export class FunnelPI1IncomePage extends BasePage {

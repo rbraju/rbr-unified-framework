@@ -9,6 +9,11 @@ public final class ConfigLoader {
 
     private static final Environment currentEnvironment;
 
+    /*
+     * Loads the configuration properties based on the current environment.
+     * The environment is determined by the "env" system property, defaulting to "STAGING" if not set.
+     * The corresponding properties file (e.g., "dev.properties", "staging.properties", "prod.properties") is loaded from the classpath.
+     */
     static {
         String envProperty = System.getProperty("env", "STAGING").toUpperCase();
         try {

@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { BasePage } from "../BasePage";
+import { BasePage } from "./BasePage";
 import { FunnelPI1BasicInfoPage } from "./FunnelPI1BasicInfoPage";
 
 export class HomePage extends BasePage {
