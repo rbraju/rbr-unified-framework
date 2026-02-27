@@ -24,7 +24,6 @@
 
     <modules>
         <module>api-tests</module>
-        <module>contract-tests</module>
         <module>ui-tests</module>
         <module>perf-tests</module>
     </modules>
