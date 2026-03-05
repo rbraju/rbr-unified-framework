@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Cleanup & Setup') {
             steps {
-                sh "docker compose -f docker-compose.test.yml down -v --remove-orphans || true"
+                sh "docker compose -f docker-compose.yml down -v --remove-orphans || true"
             }
         }
 
@@ -36,7 +36,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: "ghcr-token", usernameVariable: "GH_USERNAME", passwordVariable: "GH_TOKEN")]) {
                             echo "Deploying ${params.TARGET_SERVICE} using variable ${envVarName}"
                             sh "echo \${GH_TOKEN} | docker login \${REGISTRY} -u \${GH_USERNAME} --password-stdin"
-                            sh "export ${envVarName}=${env.SERVICE_IMAGE} && docker compose -f docker-compose.test.yml up -d --wait"
+                            sh "export ${envVarName}=${env.SERVICE_IMAGE} && docker compose -f docker-compose.yml up -d --wait"
                             sh "sleep 10"
                         }
                     } else {
@@ -58,7 +58,7 @@ pipeline {
     post {
         always{
             echo "Cleaning up ephemeral environment for ${params.TARGET_SERVICE} with image tag ${params.IMAGE_TAG}"
-            sh "docker compose -f docker-compose.test.yml down -v --remove-orphans"
+            sh "docker compose -f docker-compose.yml down -v --remove-orphans"
             testng(reportFilenamePattern: '**/testng-results.xml')
         }
     }
