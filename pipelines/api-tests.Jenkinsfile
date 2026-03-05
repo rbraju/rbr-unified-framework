@@ -76,7 +76,7 @@ pipeline {
         always{
             echo "Cleaning up ephemeral environment for ${params.TARGET_SERVICE} with image tag ${params.IMAGE_TAG}"
             sh "docker compose -f docker-compose.yml down -v --remove-orphans"
-            junit '**/testng-results.xml'
+            allure includeProperties: false, jdk: '', results: [[path: 'api-tests/allure-results']]
         }
     }
 }
