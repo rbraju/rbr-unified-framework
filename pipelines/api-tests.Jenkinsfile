@@ -54,7 +54,6 @@ pipeline {
                             echo "Deploying ${params.TARGET_SERVICE} using variable ${envVarName}"
                             sh "echo \${GH_TOKEN} | docker login \${REGISTRY} -u \${GH_USERNAME} --password-stdin"
                             sh "export ${envVarName}=${env.SERVICE_IMAGE} && docker compose -f docker-compose.yml up -d --wait"
-                            sh "sleep 10"
                         }
                     } else {
                         echo "Target service ${params.TARGET_SERVICE} is not recognized. Please check the service name in the serviceMap and try again."
