@@ -33,7 +33,7 @@ pipeline {
                     def envVarName = serviceMap[params.TARGET_SERVICE]
 
                     if (envVarName) {
-                        withCredentials([usernamePassword(credentialsId: "github-rbrcloud-credentials", usernameVariable: "GH_USERNAME", passwordVariable: "GH_TOKEN")]) {
+                        withCredentials([usernamePassword(credentialsId: "ghcr-token", usernameVariable: "GH_USERNAME", passwordVariable: "GH_TOKEN")]) {
                             echo "Deploying ${params.TARGET_SERVICE} using variable ${envVarName}"
                             sh "echo \${GH_TOKEN} | docker login \${REGISTRY} -u \${GH_USERNAME} --password-stdin"
                             sh "export ${envVarName}=${env.SERVICE_IMAGE} && docker compose -f docker-compose.test.yml up -d --wait"
