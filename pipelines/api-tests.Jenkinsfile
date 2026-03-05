@@ -2,6 +2,10 @@ pipeline {
 
     agent any
 
+    tools {
+        maven 'maven_3.9.12'
+    }
+
     parameters {
         string(name: 'TARGET_SERVICE', defaultValue: '', description: 'Name of the service to test')
         string(name: 'IMAGE_TAG', defaultValue: '', description: 'Docker image tag to test')
@@ -71,7 +75,7 @@ pipeline {
         always{
             echo "Cleaning up ephemeral environment for ${params.TARGET_SERVICE} with image tag ${params.IMAGE_TAG}"
             sh "docker compose -f docker-compose.yml down -v --remove-orphans"
-            testng(reportFilenamePattern: '**/testng-results.xml')
+            junit '**/testng-results.xml'
         }
     }
 }
