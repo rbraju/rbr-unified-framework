@@ -35,8 +35,8 @@ pipeline {
                     if (envVarName) {
                         withCredentials([
                             usernamePassword(credentialsId: "ghcr-token", usernameVariable: "GH_USERNAME", passwordVariable: "GH_TOKEN"),
-                            string(credentialsId: DB_USERNAME, variable: "DB_USERNAME"),
-                            string(credentialsId: DB_PASSWORD, variable: "DB_PASSWORD"),
+                            string(credentialsId: "DB_USERNAME", variable: "DB_USERNAME"),
+                            string(credentialsId: "DB_PASSWORD", variable: "DB_PASSWORD"),
                         ]) {
                             // Create .env file with database credentials for docker-compose
                             sh "echo DB_USERNAME=${env.DB_USERNAME} > .env"
