@@ -25,6 +25,8 @@
         <slf4j.version>2.0.9</slf4j.version>
         <jackson.version>2.15.2</jackson.version>
         <restassured.version>5.5.0</restassured.version>
+
+        <suiteXmlfile>suites/testng-default.xml</suiteXmlfile>
     </properties>
 
     <dependencies>
@@ -33,6 +35,12 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.10.14</version>
             <scope>test</scope>
         </dependency>
 
@@ -67,7 +75,7 @@
 
         <dependency>
             <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-junit5</artifactId>
+            <artifactId>allure-testng</artifactId>
             <version>${allure.version}</version>
         </dependency>
 
@@ -130,6 +138,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suiteXmlfile}</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <testNGArtifactName>org.testng:testng</testNGArtifactName>
+                </configuration>
             </plugin>
         </plugins>
     </build>
