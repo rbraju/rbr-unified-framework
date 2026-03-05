@@ -1,8 +1,8 @@
-package com.rbr.framework.tests.jsonplaceholder;
+package com.rbr.jsonplaceholder;
 
 import com.rbr.framework.model.jsonplaceholder.User;
 import com.rbr.framework.tests.BaseTest;
-import com.rbr.framework.tests.jsonplaceholder.utils.UserUtil;
+import com.rbr.jsonplaceholder.utils.UserUtil;
 import org.testng.annotations.Test;
 
 import static com.rbr.framework.core.TestContext.api;

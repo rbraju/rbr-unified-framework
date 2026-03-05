@@ -1,0 +1,68 @@
+networks:
+  apex-network:
+    name: apex-network
+    driver: bridge
+
+services:
+  # Infrastructure
+  apex-kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: apex-kafka
+    networks:
+      - apex-network
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@apex-kafka:9093'
+      KAFKA_LISTENERS: 'PLAINTEXT://apex-kafka:9092,CONTROLLER://apex-kafka:9093,PLAINTEXT_HOST://0.0.0.0:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://apex-kafka:9092,PLAINTEXT_HOST://localhost:29092'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk' # Any unique string, can be generated using `kafka-storage.sh random-uuid`
+
+  apex-portfolio-srvc:
+    depends_on:
+      - apex-kafka
+    image: ${PORTFOLIO_SRVC_IMAGE:-ghcr.io/rbrcloud/apex-portfolio-srvc:latest}
+    container_name: apex-portfolio-srvc
+    networks:
+      - apex-network
+    ports:
+      - 8081:8080
+    env_file:
+      - .env
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=apex-kafka:9092
+
+  apex-order-srvc:
+    depends_on:
+      - apex-kafka
+    image: ${ORDER_SERVICE_IMAGE:-ghcr.io/rbrcloud/apex-order-srvc:latest}
+    container_name: apex-order-srvc
+    networks:
+      - apex-network
+    ports:
+      - 8082:8080
+    env_file:
+      - .env
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=apex-kafka:9092
+
+  apex-order-execution-srvc:
+    depends_on:
+      - apex-kafka
+    image: ${ORDER_EXECUTION_SERVICE_IMAGE:-ghcr.io/rbrcloud/apex-order-execution-srvc:latest}
+    container_name: apex-order-execution-srvc
+    networks:
+      - apex-network
+    ports:
+      - 8083:8080
+    env_file:
+      - .env
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=apex-kafka:9092

@@ -1,4 +1,4 @@
-package com.rbr.framework.tests.jsonplaceholder.utils;
+package com.rbr.jsonplaceholder.utils;
 
 import com.rbr.framework.model.jsonplaceholder.Address;
 import com.rbr.framework.model.jsonplaceholder.Company;
