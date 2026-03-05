@@ -33,7 +33,19 @@ pipeline {
                     def envVarName = serviceMap[params.TARGET_SERVICE]
 
                     if (envVarName) {
-                        withCredentials([usernamePassword(credentialsId: "ghcr-token", usernameVariable: "GH_USERNAME", passwordVariable: "GH_TOKEN")]) {
+                        withCredentials([
+                            usernamePassword(credentialsId: "ghcr-token", usernameVariable: "GH_USERNAME", passwordVariable: "GH_TOKEN"),
+                            string(credentialsId: DB_USERNAME, variable: "DB_USERNAME"),
+                            string(credentialsId: DB_PASSWORD, variable: "DB_PASSWORD"),
+                        ]) {
+                            // Create .env file with database credentials for docker-compose
+                            sh "echo DB_USERNAME=${env.DB_USERNAME} > .env"
+                            sh "echo DB_PASSWORD=${env.DB_PASSWORD} >> .env"
+                            sh "echo DB_HOST=ep-cool-silence-akxxpc18-pooler.c-3.us-west-2.aws.neon.tech >> .env"
+                            sh "echo DB_NAME=apex-tracker >> .env"
+                            sh "echo KAFKA_BOOTSTRAP_SERVERS=apex-kafka:9092 >> .env"
+
+
                             echo "Deploying ${params.TARGET_SERVICE} using variable ${envVarName}"
                             sh "echo \${GH_TOKEN} | docker login \${REGISTRY} -u \${GH_USERNAME} --password-stdin"
                             sh "export ${envVarName}=${env.SERVICE_IMAGE} && docker compose -f docker-compose.yml up -d --wait"
