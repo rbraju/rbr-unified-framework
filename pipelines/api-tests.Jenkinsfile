@@ -3,6 +3,7 @@ pipeline {
     agent any
 
     tools {
+        jdk 'sdkman-java'
         maven 'maven_3.9.12'
     }
 
