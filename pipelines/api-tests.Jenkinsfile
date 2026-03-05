@@ -50,7 +50,7 @@ pipeline {
             steps{
                 dir('api-tests') {
                     echo "Executing API tests against ${params.TARGET_SERVICE} with image tag ${params.IMAGE_TAG}"
-                    sh "mvn test -DsuiteXmlfile='testng-${params.TARGET_SERVICE}.xml'"
+                    sh "mvn test -DsuiteXmlfile='suites/testng-${params.TARGET_SERVICE}.xml'"
                 }
             }
         }

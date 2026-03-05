@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Portfolio Service API Suite">
+    <test name="Portfolio API Tests">
+        <classes>
+            <class name="com.rbr.apex.portfolio.PortfolioServiceTests"/>
+        </classes>
+    </test>
+</suite>
