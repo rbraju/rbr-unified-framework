@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { BasePage } from "../demoqa/BasePage";
+import { BasePage } from "./BasePage";
 
 export class HomePage extends BasePage {
 

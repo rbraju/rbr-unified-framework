@@ -1,41 +1,52 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
+import * as path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
-    testDir: './tests',
     fullyParallel: true,
-
-    reporter: 'html',
-    timeout: 30 * 1000, // Default timeout of 30 seconds per test
-
-    // Fail the build on CI if test.only accidentally left in the source code
+    reporter: [
+        ['html', { open: process.env.CI ? 'never' : 'on-failure' }],
+    ],
+    timeout: 10 * 1000,
     forbidOnly: !!process.env.CI,
-
     expect: {
-        timeout: 6 * 1000, // Default timeout for assertions
+        timeout: 6 * 1000,
     },
-
-    // Shared settings for all the below projects. See https://playwright.dev/docs/api/class-testoptions.
     use: {
         headless: false,
         browserName: 'chromium',
-        baseURL: process.env.BASE_URL || 'https://www.upgrade.com/',
-
-        /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: 'on-first-retry',
     },
-
-    // Configure projects for major browsers
     projects: [
         {
-            name: 'chromium',
-            use: { ...devices['Desktop Chrome'] },
+            name: 'curlmecrazy',
+            testDir: './curlmecrazy/tests',
+            testMatch: /curlmecrazy\/tests\/.*\.spec\.ts/,
+            channel: 'chrome',
+            use: {
+                ...devices['Desktop Chrome'],
+                baseURL: process.env.CURLMECRAZY_BASE_URL || 'https://localhost:5173',
+            },
         },
-        // {
-        //     name: 'firefox',
-        //     use: { ...devices['Desktop Firefox'] },
-        // },
+        {
+            name: 'demoqa',
+            testDir: './demoqa/tests',
+            testMatch: /demoqa\/tests\/.*\.spec\.ts/,
+            use: {
+                ...devices['Desktop Chrome'],
+                baseURL: process.env.DEMOQA_BASE_URL || 'https://demoqa.com/',
+            },
+        },
+        {
+            name: 'upgrade',
+            testDir: './upgrade/tests',
+            testMatch: /upgrade\/tests\/.*\.spec\.ts/,
+            use: {
+                ...devices['Desktop Chrome'],
+                baseURL: process.env.UPGRADE_BASE_URL || 'https://www.upgrade.com/',
+            },
+        },
     ],
 });

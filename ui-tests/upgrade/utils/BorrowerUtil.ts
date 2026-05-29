@@ -1,4 +1,4 @@
-import { Borrower } from "../models/upgrade/Borrower";
+import { Borrower } from "../models/Borrower";
 import { faker } from "@faker-js/faker";
 
 export class BorrowerUtil {

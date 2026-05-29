@@ -1,7 +1,7 @@
 import test from "@playwright/test";
-import { Borrower } from "../../models/upgrade/Borrower";
-import { HomePage } from "../../pages/upgrade/HomePage";
-import { BorrowerUtil } from "../../utils/BorrowerUtil";
+import { Borrower } from "../models/Borrower";
+import { HomePage } from "../pages/HomePage";
+import { BorrowerUtil } from "../utils/BorrowerUtil";
 
 test.beforeEach(async ({ page }) => {
     // Maximize the browser window

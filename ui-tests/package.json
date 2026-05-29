@@ -3,7 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:curlmecrazy": "npx playwright test --project=curlmecrazy",
+    "test:curlmecrazy:headed": "npx playwright test --project=curlmecrazy --headed",
+    "test:demoqa": "npx playwright test --project=demoqa",
+    "test:demoqa:headed": "npx playwright test --project=demoqa --headed",
+    "test:upgrade": "npx playwright test --project=upgrade",
+    "test:upgrade:headed": "npx playwright test --project=upgrade --headed",
+
+    "healer": "npx ts-node --esm curlmecrazy/healer.mts",
+
+    "report": "npx playwright show-report"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -12,6 +23,7 @@
     "@faker-js/faker": "^10.2.0",
     "@playwright/test": "^1.57.0",
     "@types/node": "^25.0.9",
-    "dotenv": "^17.3.1"
+    "dotenv": "^17.3.1",
+    "typescript": "^5.0.0"
   }
 }
